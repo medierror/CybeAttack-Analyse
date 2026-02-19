@@ -1,0 +1,195 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Cybersecurity Attack Detection Dashboard — Upload log files and detect threats with Machine Learning.">
+    <title>CyberShield — Attack Detection Dashboard</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js@4.4.7/dist/chart.umd.min.js"></script>
+</head>
+<body>
+
+    <!-- ═══ HEADER ═══ -->
+    <header class="header">
+        <div class="header__inner">
+            <div class="header__brand">
+                <div class="header__logo">
+                    <svg viewBox="0 0 40 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <path d="M20 2L4 10V20C4 30 20 38 20 38C20 38 36 30 36 20V10L20 2Z" stroke="url(#shield-grad)" stroke-width="2.5" fill="none"/>
+                        <path d="M14 20L18 24L26 16" stroke="url(#shield-grad)" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        <defs>
+                            <linearGradient id="shield-grad" x1="4" y1="2" x2="36" y2="38">
+                                <stop stop-color="#00F0FF"/>
+                                <stop offset="1" stop-color="#7B61FF"/>
+                            </linearGradient>
+                        </defs>
+                    </svg>
+                </div>
+                <div>
+                    <h1 class="header__title">CyberShield</h1>
+                    <p class="header__subtitle">Attack Detection Dashboard</p>
+                </div>
+            </div>
+            <div class="header__status">
+                <span class="status-dot"></span>
+                <span>System Online</span>
+            </div>
+        </div>
+    </header>
+
+    <!-- ═══ MAIN CONTENT ═══ -->
+    <main class="main">
+
+        <!-- ── Upload Section ── -->
+        <section class="upload-section" id="upload-section">
+            <h2 class="section-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M21 15v4a2 2 0 0 1-2 2H5a2 2 0 0 1-2-2v-4"/><polyline points="17 8 12 3 7 8"/><line x1="12" y1="3" x2="12" y2="15"/></svg>
+                Upload Log File
+            </h2>
+            <div class="upload-zone" id="upload-zone">
+                <div class="upload-zone__icon">
+                    <svg width="48" height="48" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5">
+                        <path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/>
+                        <polyline points="14 2 14 8 20 8"/>
+                        <line x1="12" y1="18" x2="12" y2="12"/>
+                        <polyline points="9 15 12 12 15 15"/>
+                    </svg>
+                </div>
+                <p class="upload-zone__text">Drag & drop your log file here</p>
+                <p class="upload-zone__hint">or click to browse — Supports .txt, .log, .csv (max 16 MB)</p>
+                <input type="file" id="file-input" accept=".txt,.log,.csv" hidden>
+            </div>
+
+            <!-- File info bar -->
+            <div class="file-info" id="file-info" style="display:none;">
+                <div class="file-info__name" id="file-name"></div>
+                <div class="file-info__size" id="file-size"></div>
+                <button class="file-info__remove" id="file-remove" title="Remove file">&times;</button>
+            </div>
+
+            <button class="btn btn--primary" id="scan-btn" disabled>
+                <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="11" cy="11" r="8"/><path d="M21 21l-4.35-4.35"/></svg>
+                <span>Scan for Threats</span>
+            </button>
+
+            <!-- Progress -->
+            <div class="progress-bar" id="progress-bar" style="display:none;">
+                <div class="progress-bar__track">
+                    <div class="progress-bar__fill" id="progress-fill"></div>
+                </div>
+                <p class="progress-bar__text" id="progress-text">Analyzing file...</p>
+            </div>
+        </section>
+
+        <!-- ── Results Section (hidden until scan completes) ── -->
+        <section class="results-section" id="results-section" style="display:none;">
+            <h2 class="section-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 12h-4l-3 9L9 3l-3 9H2"/></svg>
+                Scan Results
+                <span class="results-filename" id="results-filename"></span>
+            </h2>
+
+            <!-- Stats Cards -->
+            <div class="stats-grid">
+                <div class="stat-card stat-card--lines">
+                    <div class="stat-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="16" y1="13" x2="8" y2="13"/><line x1="16" y1="17" x2="8" y2="17"/><polyline points="10 9 9 9 8 9"/></svg>
+                    </div>
+                    <div class="stat-card__data">
+                        <span class="stat-card__value" id="stat-total-lines">0</span>
+                        <span class="stat-card__label">Total Lines Scanned</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-card--attacks">
+                    <div class="stat-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
+                    </div>
+                    <div class="stat-card__data">
+                        <span class="stat-card__value" id="stat-attacks">0</span>
+                        <span class="stat-card__label">Attacks Detected</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-card--clean">
+                    <div class="stat-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 11.08V12a10 10 0 1 1-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg>
+                    </div>
+                    <div class="stat-card__data">
+                        <span class="stat-card__value" id="stat-clean">0</span>
+                        <span class="stat-card__label">Clean Lines</span>
+                    </div>
+                </div>
+                <div class="stat-card stat-card--level">
+                    <div class="stat-card__icon">
+                        <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg>
+                    </div>
+                    <div class="stat-card__data">
+                        <span class="stat-card__value" id="stat-threat-level">Safe</span>
+                        <span class="stat-card__label">Threat Level</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Charts -->
+            <div class="charts-grid">
+                <div class="chart-card">
+                    <h3 class="chart-card__title">Attack Type Distribution</h3>
+                    <div class="chart-card__body">
+                        <canvas id="chart-attack-types"></canvas>
+                    </div>
+                </div>
+                <div class="chart-card">
+                    <h3 class="chart-card__title">Severity Breakdown</h3>
+                    <div class="chart-card__body">
+                        <canvas id="chart-severity"></canvas>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Threat Table -->
+            <div class="table-card">
+                <h3 class="table-card__title">
+                    Detected Threats
+                    <span class="table-card__count" id="threat-count">0</span>
+                </h3>
+                <div class="table-card__wrapper">
+                    <table class="threat-table" id="threat-table">
+                        <thead>
+                            <tr>
+                                <th>#</th>
+                                <th>Line</th>
+                                <th>Attack Type</th>
+                                <th>Severity</th>
+                                <th>Matched Pattern</th>
+                                <th>Raw Content</th>
+                            </tr>
+                        </thead>
+                        <tbody id="threat-tbody"></tbody>
+                    </table>
+                </div>
+            </div>
+        </section>
+
+        <!-- ── Scan History Sidebar ── -->
+        <section class="history-section" id="history-section">
+            <h2 class="section-title">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><polyline points="12 6 12 12 16 14"/></svg>
+                Scan History
+            </h2>
+            <div class="history-list" id="history-list">
+                <p class="history-empty">No scans yet. Upload a log file to begin.</p>
+            </div>
+        </section>
+
+    </main>
+
+    <!-- ═══ FOOTER ═══ -->
+    <footer class="footer">
+        <p>&copy; 2026 CyberShield Dashboard — University Cybersecurity Project</p>
+    </footer>
+
+    <script src="{{ url_for('static', filename='js/app.js') }}"></script>
+</body>
+</html>
