@@ -1,0 +1,63 @@
+=====================================================
+   GUIDE D'INSTALLATION - CybeAttack-Analyse
+   Tableau de Bord de Détection de Cyberattaques
+=====================================================
+
+
+PRÉREQUIS
+---------
+  - Python 3.10 ou plus récent
+    Télécharger ici : https://www.python.org/downloads/
+    IMPORTANT : Lors de l'installation, cocher "Add Python to PATH"
+
+
+ÉTAPES
+------
+
+1) Ouvrir un terminal (Invite de commandes ou PowerShell)
+
+2) Se placer dans le dossier du projet :
+
+      cd chemin\vers\CybeAttack-Analyse
+
+3) Créer un environnement virtuel :
+
+      python -m venv .venv
+
+4) Activer l'environnement virtuel :
+
+      Windows (PowerShell) :   .\.venv\Scripts\Activate.ps1
+      Windows (CMD)        :   .\.venv\Scripts\activate.bat
+      Mac / Linux          :   source .venv/bin/activate
+
+   Vous devez voir (.venv) apparaitre au debut de la ligne.
+
+5) Installer les dépendances :
+
+      pip install -r cyber-dashboard\requirements.txt
+
+6) Lancer l'application :
+
+      cd cyber-dashboard
+      python app.py
+
+7) Ouvrir le navigateur et aller a :
+
+      http://127.0.0.1:5000
+
+8) Pour tester : cliquer sur Upload et choisir le fichier
+   "sample_test.log" qui se trouve dans le dossier cyber-dashboard.
+
+
+POUR ARRETER LE SERVEUR
+------------------------
+  Appuyer sur CTRL + C dans le terminal.
+
+
+EN CAS DE PROBLEME
+-------------------
+  - Verifier que Python est bien installe : python --version
+  - Verifier que pip est installe         : pip --version
+  - Si erreur "Module not found"          : relancer l'etape 5
+  - Si le port 5000 est occupe            : fermer l'autre programme
+    qui utilise ce port ou modifier le port dans app.py
